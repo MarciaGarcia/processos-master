@@ -1,0 +1,38 @@
+﻿@model Confere.Processos.Modelo.Materia
+@{
+    ViewBag.Title = "Senado Federal - Consulta Processo";
+}
+
+<h1>@Model</h1>
+<h4>@Model.DadosBasicos.Ementa</h4>
+
+<h3>Autores</h3>
+<div class="container">
+@foreach (var autor in Model.Autoria)
+{
+    <div class="col-lg-4">
+        @if (autor.Identificacao != null)
+        {
+            var identificacaoAutor = $"{autor.Identificacao.FormaTratamento} {autor.NomeAutor} ({autor.Identificacao.SiglaPartidoParlamentar})";
+            <img class="img-responsive img-circle img-autor" src="@autor.Identificacao.UrlFotoParlamentar" />
+            <h4>@identificacaoAutor</h4>
+            <p><a href="@autor.Identificacao.UrlPaginaParlamentar" class="btn btn-default">Site do Autor</a></p>
+        } else
+        {
+            <h4>@autor.NomeAutor</h4>
+        }
+    </div>
+}
+</div>
+
+<h3>Tramitações</h3>
+@foreach (var tramitacao in Model.Tramitacoes)
+{
+    <p><strong>@string.Format("{0:dd/MM/yyyy}", tramitacao.Identificacao.Data)</strong> - @tramitacao.Identificacao.Texto</p>
+}
+
+<h3>Situação Atual</h3>
+@foreach(var autuacao in Model.SituacaoAtual.Autuacoes)
+{
+    <p>@autuacao.Situacao.Descricao</p>
+}

@@ -1,0 +1,117 @@
+﻿@model Confere.ProcessosWeb.Consulta.Models.HomeViewModel
+@{ 
+    ViewBag.Title = "Consulta Processos - Home";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>Processos</h2>
+        <p>
+            Processos monitorados pelo sistema.
+        </p>
+        @foreach (var pa in Model.ProcessosMonitorados)
+        {
+            <article>
+                <h4><a href="/senado/@pa.Processo">@pa.Processo</a>&nbsp;<small>(@pa.Processo.Origem)</small></h4>
+                @if(pa.EstaSendoAcompanhado)
+                {
+                    <div class="alert alert-info alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        Você já está acompanhando esse processo ;-)
+                    </div>
+                }
+                <p>@pa.Processo.Emenda</p>
+                <small>Ultima atualização em @string.Format("{0:dd/MM/yyyy}", pa.Processo.DataUltimaAtualizacao).</small>
+                <a title="Excluir" data-toggle="modal" data-target="#modalExcluir" data-processo-id="@pa.Processo.Id" data-processo-codigo="@pa.Processo"><span class="glyphicon glyphicon-trash"></span></a>
+                <a title="Acompanhar" data-toggle="modal" data-target="#modalAcompanhar" data-processo-id="@pa.Processo.Id" data-processo-codigo="@pa.Processo"><span class="glyphicon glyphicon-eye-open"></span></a>
+            </article>
+        }
+    </div>
+    <div class="col-md-4">
+        <h2>Não achou seu processo?</h2>
+        <p>
+            Seu processo não está na lista? Cadastre-o abaixo.
+        </p>
+        <form action="/Home/CadastrarProcesso" method="post">
+            <div class="form-group">
+                <label>
+                    Sigla:
+                    <input class="form-control" name="sigla" required maxlength="3" size="3" />
+                </label>
+                <label>
+                    Número:
+                    <input class="form-control" name="numero" required size="8" maxlength="8"/>
+                </label>
+                <label>
+                    Ano:
+                    <input class="form-control" name="ano" required maxlength="4" size="4" />
+                </label>
+                <label>
+                    Origem:
+                    <input class="form-control" name="origem" readonly value="Senado" size="8" /> 
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar!</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAcompanhar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/Home/AcompanharProcesso" method="post">
+            <input type="hidden" name="processoId" />
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" id="exampleModalLabel">Acompanhar Processo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Para acompanhar o processo <span id="modal-processo-codigo"></span>, digite as informações abaixo.</p>
+                    <div class="form-group row">
+                        <label for="inputNome" class="col-sm-2 col-form-label">Nome:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="inputNome" placeholder="Nome" name="nome" required />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Email:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" >Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Modal confirmação de exclusão-->
+<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/Home/ExcluirProcesso" method="post">
+            <input type="hidden" name="id" />
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title" id="modalExcluirLabel">Excluir Processo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Deseja realmente excluir o processo <span id="excluir-processo-codigo"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Excluir</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿@model IList<Caelum.Senado.ConsultaProcessos.Controllers.InteressadoViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista de Interessados</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Processos</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var i in Model)
+        {
+            <tr>
+                <td>@i.Nome</td>
+                <td>@i.Email</td>
+                <td>@i.Processos</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
